@@ -28,12 +28,14 @@ Call:
 POST https://api.github.com/repos/marteinnn/hlad-discount-sale-preview-sync/actions/workflows/discount-sale-preview-sync.yml/dispatches
 Authorization: Bearer <fine-grained GitHub token>
 Accept: application/vnd.github+json
+User-Agent: hlad-discount-sale-preview-scheduler
 Content-Type: application/json
 
 {"ref":"main"}
 ```
 
 Recommended cadence: every 30 minutes.
+Expected success response: `204 No Content`.
 
 The fine-grained GitHub token should be scoped only to `marteinnn/hlad-discount-sale-preview-sync` and should have Actions/workflows write permission.
 
