@@ -1,6 +1,17 @@
 # Hlað Discount Sale Preview Sync
 
-This small public repository runs the Shopify discount sale-preview sync for `hlad-is.myshopify.com`.
+This small public repository is a fallback runner for the Shopify discount sale-preview sync for `hlad-is.myshopify.com`.
+
+The preferred staff workflow is now the Shopify Admin app **Hlað Sale Preview Sync**:
+
+1. Open Shopify Admin.
+2. Go to **Apps**.
+3. Open **Hlað Sale Preview Sync**.
+4. Press **Skanna og uppfæra afslætti**.
+
+Admin app source:
+
+https://github.com/marteinnn/hlad-sale-preview-sync-admin-app
 
 The code contains no Shopify credentials. Required values live in GitHub Actions secrets:
 
@@ -12,7 +23,7 @@ The workflow can be run manually from GitHub Actions with **Run workflow**:
 
 https://github.com/marteinnn/hlad-discount-sale-preview-sync/actions/workflows/discount-sale-preview-sync.yml
 
-The scheduled trigger is the intended unattended production path. If GitHub does not create `schedule` runs for this account/repo, use an external HTTPS cron service to call the workflow dispatch API:
+If GitHub fallback is needed, use the workflow's **Run workflow** button. If an external scheduler is used, call the workflow dispatch API:
 
 ```http
 POST https://api.github.com/repos/marteinnn/hlad-discount-sale-preview-sync/actions/workflows/discount-sale-preview-sync.yml/dispatches

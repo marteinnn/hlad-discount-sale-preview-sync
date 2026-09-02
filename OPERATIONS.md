@@ -2,11 +2,17 @@
 
 ## Current State
 
-- Manual/API workflow dispatch works and has been tested end to end.
+- The preferred workflow is now the Shopify Admin app **Hlað Sale Preview Sync**.
+- Staff can open the app in Shopify Admin and press **Skanna og uppfæra afslætti**.
+- Manual/API workflow dispatch in this repo still works and has been tested end to end.
 - GitHub `schedule` did not create runs during testing, even in a public repo.
-- The workflow still keeps a twice-hourly schedule in case GitHub begins emitting scheduled runs later.
+- This repo should be treated as fallback only.
 
-## Manual Refresh Button
+Admin app source:
+
+https://github.com/marteinnn/hlad-sale-preview-sync-admin-app
+
+## GitHub Manual Fallback
 
 Open this workflow and choose **Run workflow**:
 
@@ -14,7 +20,7 @@ https://github.com/marteinnn/hlad-discount-sale-preview-sync/actions/workflows/d
 
 After the run finishes, open the latest run and download the `discount-sale-preview-report` artifact if you need to inspect the sync result.
 
-## Reliable Unattended Scheduler
+## External Scheduler Fallback
 
 Use any HTTPS cron service that supports:
 
@@ -34,7 +40,7 @@ Content-Type: application/json
 {"ref":"main"}
 ```
 
-Recommended cadence: every 30 minutes.
+Recommended cadence if this fallback is intentionally used: every 30 minutes.
 Expected success response: `204 No Content`.
 
 The fine-grained GitHub token should be scoped only to `marteinnn/hlad-discount-sale-preview-sync` and should have Actions/workflows write permission.
