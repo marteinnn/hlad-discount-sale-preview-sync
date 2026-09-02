@@ -5,7 +5,7 @@
 - The preferred workflow is now the Shopify Admin app **Hlað Sale Preview Sync**.
 - Staff can open the app in Shopify Admin and press **Skanna og uppfæra afslætti**.
 - Manual/API workflow dispatch in this repo still works and has been tested end to end.
-- GitHub `schedule` did not create runs during testing, even in a public repo.
+- GitHub scheduled runs are intentionally disabled to avoid a second unattended sync path.
 - This repo should be treated as fallback only.
 
 Admin app source:
