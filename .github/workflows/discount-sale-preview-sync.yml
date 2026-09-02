@@ -1,0 +1,47 @@
+name: Shopify discount sale preview sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Temporary verification cadence. Restore to the production cadence after one scheduled run is proven.
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: discount-sale-preview-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync Shopify discount previews
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out scheduler repo
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Run discount preview sync
+        env:
+          SHOPIFY_STORE: ${{ secrets.SHOPIFY_STORE }}
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
+          SHOPIFY_API_VERSION: ${{ vars.SHOPIFY_API_VERSION || '2026-07' }}
+          SHOPIFY_API_TIMEOUT_MS: 60000
+          SHOPIFY_API_RETRY_ATTEMPTS: 4
+        run: node sync-discount-sale-previews.mjs --apply
+
+      - name: Upload sync report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: discount-sale-preview-report
+          path: reports/discount-sale-previews-*/*.json
+          if-no-files-found: ignore
