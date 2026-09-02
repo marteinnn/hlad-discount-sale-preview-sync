@@ -8,7 +8,22 @@ The code contains no Shopify credentials. Required values live in GitHub Actions
 - `SHOPIFY_CLIENT_ID`
 - `SHOPIFY_CLIENT_SECRET`
 
-The workflow can be run manually from GitHub Actions with **Run workflow**. The scheduled trigger is the unattended production path.
+The workflow can be run manually from GitHub Actions with **Run workflow**:
+
+https://github.com/marteinnn/hlad-discount-sale-preview-sync/actions/workflows/discount-sale-preview-sync.yml
+
+The scheduled trigger is the intended unattended production path. If GitHub does not create `schedule` runs for this account/repo, use an external HTTPS cron service to call the workflow dispatch API:
+
+```http
+POST https://api.github.com/repos/marteinnn/hlad-discount-sale-preview-sync/actions/workflows/discount-sale-preview-sync.yml/dispatches
+Authorization: Bearer <fine-grained GitHub token>
+Accept: application/vnd.github+json
+Content-Type: application/json
+
+{"ref":"main"}
+```
+
+The fine-grained token only needs access to this repository with Actions/workflows write permission.
 
 The sync writes sale-preview metafields used by the Shopify theme:
 

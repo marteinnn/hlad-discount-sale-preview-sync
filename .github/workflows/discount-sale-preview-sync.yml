@@ -3,8 +3,7 @@ name: Shopify discount sale preview sync
 on:
   workflow_dispatch:
   schedule:
-    # Temporary verification cadence. Restore to the production cadence after one scheduled run is proven.
-    - cron: "*/5 * * * *"
+    - cron: "20,50 * * * *"
 
 permissions:
   contents: read
