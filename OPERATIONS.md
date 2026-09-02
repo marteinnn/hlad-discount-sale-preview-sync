@@ -1,0 +1,52 @@
+# Discount Sync Operations
+
+## Current State
+
+- Manual/API workflow dispatch works and has been tested end to end.
+- GitHub `schedule` did not create runs during testing, even in a public repo.
+- The workflow still keeps a twice-hourly schedule in case GitHub begins emitting scheduled runs later.
+
+## Manual Refresh Button
+
+Open this workflow and choose **Run workflow**:
+
+https://github.com/marteinnn/hlad-discount-sale-preview-sync/actions/workflows/discount-sale-preview-sync.yml
+
+After the run finishes, open the latest run and download the `discount-sale-preview-report` artifact if you need to inspect the sync result.
+
+## Reliable Unattended Scheduler
+
+Use any HTTPS cron service that supports:
+
+- POST requests
+- custom headers
+- JSON request body
+
+Call:
+
+```http
+POST https://api.github.com/repos/marteinnn/hlad-discount-sale-preview-sync/actions/workflows/discount-sale-preview-sync.yml/dispatches
+Authorization: Bearer <fine-grained GitHub token>
+Accept: application/vnd.github+json
+Content-Type: application/json
+
+{"ref":"main"}
+```
+
+Recommended cadence: every 30 minutes.
+
+The fine-grained GitHub token should be scoped only to `marteinnn/hlad-discount-sale-preview-sync` and should have Actions/workflows write permission.
+
+Do not put the Shopify Admin API credentials in the storefront theme. A storefront page or Shopify theme template is not a safe place to trigger the sync directly.
+
+## Expected Report
+
+A healthy run should show:
+
+- `mode`: `apply`
+- `discountCount`: number of active automatic discounts Shopify returned
+- `previewVariantCount`: variants with storefront sale previews
+- `previewProductCount`: products with storefront sale previews
+- `staleVariantCount`: stale variant previews cleared
+- `staleProductCount`: stale product previews cleared
+- `skipped`: empty, unless the discount uses a shape that cannot be safely previewed
